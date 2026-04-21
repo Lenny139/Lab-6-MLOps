@@ -1,0 +1,8 @@
+FROM python:3.10-slim
+WORKDIR /workspace
+COPY requirements.txt .
+RUN pip install --no-cache-dir -r requirements.txt
+COPY train/ .
+# Creamos la carpeta donde se guardará el modelo dentro del contenedor
+RUN mkdir -p /app/modelos
+CMD ["python", "train.py"]

@@ -1,0 +1,31 @@
+version: '3.8'
+
+services:
+  # 1. Entrenamiento
+  entrenador:
+    build:
+      context: .
+      dockerfile: Dockerfile.train
+    volumes:
+      - ./modelos_compartidos:/app/modelos
+
+  # 2. API
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile.app
+    volumes:
+      - ./modelos_compartidos:/app/modelos
+    depends_on:
+      entrenador:
+        condition: service_completed_successfully
+
+  # 3. Interfaz Web
+  frontend:
+    build:
+      context: .
+      dockerfile: Dockerfile.web
+    ports:
+      - "8501:8501"
+    depends_on:
+      - api
