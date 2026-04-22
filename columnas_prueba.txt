@@ -1,0 +1,23 @@
+Columnas esperadas para datos de prueba (entrada en la interfaz):
+
+1) Numéricas obligatorias
+- age
+- overall
+- potential
+- pace
+- shooting
+- passing
+- dribbling
+- defending
+- physic
+
+2) Categóricas (acepta cualquiera de estas variantes)
+- position o player_positions
+- nationality o nationality_name
+
+Columna objetivo usada en entrenamiento (no se envía en prueba):
+- value_eur
+
+Notas:
+- El archivo de pruebas debe venir en CSV.
+- La API responde una columna adicional llamada prediction con el valor estimado.

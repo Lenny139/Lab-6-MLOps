@@ -3,7 +3,6 @@ __pycache__/
 *.py[cod]
 
 modelos_compartidos/
-train/dataset.csv
 
 archive/*.csv
 !archive/male_players (legacy).csv

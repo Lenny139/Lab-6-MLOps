@@ -115,12 +115,23 @@ def build_dataset() -> Path:
     df = df.dropna().drop_duplicates()
     print(f"Filas eliminadas por nulos/duplicados: {before_dropna - len(df)}")
 
-    categorical_cols = [column for column in ["position", "nationality"] if column in df.columns]
-    if categorical_cols:
-        df = pd.get_dummies(df, columns=categorical_cols, drop_first=False)
+    ordered_feature_cols = [
+        "age",
+        "overall",
+        "potential",
+        "pace",
+        "shooting",
+        "passing",
+        "dribbling",
+        "defending",
+        "physic",
+    ]
+    if position_col in df.columns:
+        ordered_feature_cols.append("position")
+    if nationality_col in df.columns:
+        ordered_feature_cols.append("nationality")
 
-    feature_cols = [column for column in df.columns if column != TARGET_COLUMN]
-    df = df[feature_cols + [TARGET_COLUMN]]
+    df = df[ordered_feature_cols + [TARGET_COLUMN]]
 
     output_path = Path(__file__).resolve().parent / "dataset.csv"
     df.to_csv(output_path, index=False)

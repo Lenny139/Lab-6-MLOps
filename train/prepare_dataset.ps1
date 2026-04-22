@@ -1,7 +1,15 @@
 $ErrorActionPreference = 'Stop'
 
 $projectRoot = Split-Path -Parent $PSScriptRoot
-$archivePath = Join-Path (Split-Path -Parent $projectRoot) 'archive'
+$candidateArchivePaths = @(
+  (Join-Path $projectRoot 'archive'),
+  (Join-Path (Split-Path -Parent $projectRoot) 'archive')
+)
+
+$archivePath = $candidateArchivePaths | Where-Object { Test-Path $_ } | Select-Object -First 1
+if (-not $archivePath) {
+  throw "No se encontró la carpeta archive. Rutas intentadas: $($candidateArchivePaths -join ', ')"
+}
 $outPath = Join-Path $PSScriptRoot 'dataset.csv'
 
 $fileNames = @(

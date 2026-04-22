@@ -56,17 +56,21 @@ def preprocess_for_inference(df: pd.DataFrame, model) -> pd.DataFrame:
         )
 
     categorical_present = [col for col in ["position", "nationality"] if col in data.columns]
-    if categorical_present:
-        if data[categorical_present].isnull().any().any():
-            raise HTTPException(
-                status_code=400,
-                detail="Hay valores nulos en columnas categóricas requeridas.",
-            )
-        data = pd.get_dummies(data, columns=categorical_present, drop_first=False)
+    if categorical_present and data[categorical_present].isnull().any().any():
+        raise HTTPException(
+            status_code=400,
+            detail="Hay valores nulos en columnas categóricas requeridas.",
+        )
 
     if hasattr(model, "feature_names_in_"):
         expected_features = list(model.feature_names_in_)
-        data = data.reindex(columns=expected_features, fill_value=0)
+        missing_features = [feature for feature in expected_features if feature not in data.columns]
+        if missing_features:
+            raise HTTPException(
+                status_code=400,
+                detail=f"Faltan columnas requeridas para predecir: {missing_features}",
+            )
+        data = data[expected_features]
 
     return data
 
