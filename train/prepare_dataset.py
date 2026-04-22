@@ -29,8 +29,15 @@ def _first_existing_column(df: pd.DataFrame, candidates: list[str]) -> str | Non
 
 
 def _resolve_input_files() -> list[Path]:
-    root = Path(__file__).resolve().parents[2]
-    archive_dir = root / "archive"
+    repo_root = Path(__file__).resolve().parents[1]
+    candidate_archive_dirs = [
+        repo_root / "archive",
+        repo_root.parent / "archive",
+    ]
+
+    archive_dir = next((path for path in candidate_archive_dirs if path.exists()), None)
+    if archive_dir is None:
+        return []
 
     preferred_files = [
         archive_dir / "male_players (legacy).csv",
