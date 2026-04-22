@@ -11,7 +11,7 @@ st.title("MLops ")
 st.sidebar.header("Configuración")
 st.sidebar.info("Este portal se conecta a un microservicio de IA desplegado en Docker.")
 
-uploaded_file = st.file_uploader(type="csv")
+uploaded_file = st.file_uploader("Sube tu archivo CSV con datos de jugadores", type="csv")
 
 if uploaded_file:
     df_original = pd.read_csv(uploaded_file)
